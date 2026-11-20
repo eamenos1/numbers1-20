@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUMBERS 1 TO 20 • ENGLISH FOR KIDS</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Tone.js per a efectes de so suaus -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', 'Nunito', sans-serif;
+            text-transform: uppercase;
+            background-color: #fefce8;
+            background-image: radial-gradient(#fde047 2px, transparent 2px);
+            background-size: 28px 28px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-infantil {
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.16);
+        }
+        .btn-infantil:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.16);
+        }
+        .btn-infantil:active:not(:disabled) {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.16);
+        }
+
+        @keyframes pop-in {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.06); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop-in {
+            animation: pop-in 0.3s ease-out forwards;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-4deg); }
+            75% { transform: rotate(4deg); }
+        }
+        .animate-wiggle {
+            animation: wiggle 0.4s ease-in-out;
+        }
+
+        @keyframes spin-drum {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-18deg) scale(1.08); }
+            50% { transform: rotate(18deg) scale(1.1); }
+            75% { transform: rotate(-12deg) scale(1.06); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+        .animate-drum {
+            animation: spin-drum 0.55s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+    <!-- CAPÇALERA PRINCIPAL -->
+    <header class="bg-white/95 backdrop-blur-md shadow-md sticky top-0 z-30 border-b-4 border-amber-400">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <button onclick="goHome()" class="flex items-center gap-3 text-left focus:outline-none group">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500 via-amber-400 to-sky-500 flex items-center justify-center text-white text-2xl font-bold shadow-md group-hover:scale-105 transition-transform">
+                    1-20
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-800 leading-none tracking-wide">
+                        NUMBERS IN ENGLISH
+                    </h1>
+                    <p class="text-xs font-bold text-amber-700 mt-0.5">
+                        INFANTIL • DECRET 21/2023 • LLETRA MAJÚSCULA
+                    </p>
+                </div>
+            </button>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- SELECTOR DE NIVELL DUA (1-10 O 1-20) -->
+                <div class="bg-slate-100 p-1 rounded-2xl border-2 border-slate-200 flex gap-1">
+                    <button onclick="setMaxNumber(10)" id="btn-range-10" class="px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition-all">
+                        1 TO 10
+                    </button>
+                    <button onclick="setMaxNumber(20)" id="btn-range-20" class="px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition-all">
+                        1 TO 20
+                    </button>
+                </div>
+
+                <!-- BOTÓ ORIENTACIÓ PEDAGÒGICA -->
+                <button onclick="toggleDecretModal(true)" class="btn-infantil bg-purple-600 hover:bg-purple-700 text-white px-3.5 py-2 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-1.5">
+                    <span>📋</span>
+                    <span class="hidden sm:inline">DECRET</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTINGUT PRINCIPAL -->
+    <main id="app-container" class="flex-grow max-w-5xl w-full mx-auto px-4 py-6">
+    </main>
+
+    <!-- MODAL D'ORIENTACIÓ PEDAGÒGICA (DECRET 21/2023) -->
+    <div id="decret-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border-4 border-purple-300 max-h-[90vh] overflow-y-auto space-y-4">
+            <div class="flex justify-between items-center border-b-2 border-slate-100 pb-3">
+                <h2 class="text-xl sm:text-2xl font-bold text-purple-700 flex items-center gap-2">
+                    <span>📋</span> ENFOCAMENT DECRET 21/2023 (INFANTIL)
+                </h2>
+                <button onclick="toggleDecretModal(false)" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg flex items-center justify-center">
+                    ✕
+                </button>
+            </div>
+
+            <div class="space-y-3 text-sm sm:text-base text-slate-700 leading-relaxed">
+                <div class="bg-amber-50 p-4 rounded-2xl border-2 border-amber-200">
+                    <h3 class="font-bold text-amber-900 mb-1">1. APROXIMACIÓ VIVENCIAL A LA LLENGUA ESTRANGERA</h3>
+                    <p>IMMERSIÓ NATURAL EN ANGLÈS (<strong>EN-GB</strong>) MITJANÇANT EL JOC, LA REPETICIÓ SIGNIFICATIVA I EL SUPORT VISUAL PERMANENT.</p>
+                </div>
+
+                <div class="bg-sky-50 p-4 rounded-2xl border-2 border-sky-200">
+                    <h3 class="font-bold text-sky-900 mb-1">2. EIX 3: DESCOBERTA DE L'ENTORN (RAONAMENT MATEMÀTIC)</h3>
+                    <p>TREBALLA EL COMPTATGE AMB CORRESPONDÈNCIA U A U, LA SUBITITZACIÓ, LA COMPOSICIÓ DEL 10 + UNITATS AMB <strong>TEN FRAMES (CAIXES DE 10)</strong> I L'ORDRE NUMÈRIC.</p>
+                </div>
+
+                <div class="bg-emerald-50 p-4 rounded-2xl border-2 border-emerald-200">
+                    <h3 class="font-bold text-emerald-900 mb-1">3. DISSENY UNIVERSAL PER A L'APRENENTATGE (DUA)</h3>
+                    <p>LLETRA MAJÚSCULA D'ALTA LEGIBILITAT, ÀUDIO EN TOTES LES INTERACCIONS, EXEMPLES INFINITS SENSE REPETICIÓ I BINGO DE SORTEIG PER JUGAR EN GRUP A L'AULA.</p>
+                </div>
+            </div>
+
+            <div class="text-right pt-2">
+                <button onclick="toggleDecretModal(false)" class="btn-infantil bg-purple-600 text-white px-6 py-2.5 rounded-2xl font-bold">
+                    ENTÈS! 👍
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. DADES DELS NÚMEROS DE L'1 AL 20 EN ANGLÈS
+        // ==========================================
+        const NUMBERS_DATA = [
+            { num: 1, word: "ONE", color: "bg-rose-500 border-rose-700 text-white" },
+            { num: 2, word: "TWO", color: "bg-orange-500 border-orange-700 text-white" },
+            { num: 3, word: "THREE", color: "bg-amber-400 border-amber-600 text-slate-900" },
+            { num: 4, word: "FOUR", color: "bg-lime-500 border-lime-700 text-white" },
+            { num: 5, word: "FIVE", color: "bg-emerald-500 border-emerald-700 text-white" },
+            { num: 6, word: "SIX", color: "bg-teal-500 border-teal-700 text-white" },
+            { num: 7, word: "SEVEN", color: "bg-cyan-500 border-cyan-700 text-white" },
+            { num: 8, word: "EIGHT", color: "bg-sky-500 border-sky-700 text-white" },
+            { num: 9, word: "NINE", color: "bg-blue-500 border-blue-700 text-white" },
+            { num: 10, word: "TEN", color: "bg-indigo-500 border-indigo-700 text-white" },
+            { num: 11, word: "ELEVEN", color: "bg-violet-500 border-violet-700 text-white" },
+            { num: 12, word: "TWELVE", color: "bg-purple-500 border-purple-700 text-white" },
+            { num: 13, word: "THIRTEEN", color: "bg-fuchsia-500 border-fuchsia-700 text-white" },
+            { num: 14, word: "FOURTEEN", color: "bg-pink-500 border-pink-700 text-white" },
+            { num: 15, word: "FIFTEEN", color: "bg-rose-600 border-rose-800 text-white" },
+            { num: 16, word: "SIXTEEN", color: "bg-orange-600 border-orange-800 text-white" },
+            { num: 17, word: "SEVENTEEN", color: "bg-amber-500 border-amber-700 text-slate-900" },
+            { num: 18, word: "EIGHTEEN", color: "bg-emerald-600 border-emerald-800 text-white" },
+            { num: 19, word: "NINETEEN", color: "bg-sky-600 border-sky-800 text-white" },
+            { num: 20, word: "TWENTY", color: "bg-indigo-600 border-indigo-800 text-white" }
+        ];
+
+        const DAILY_OBJECTS = [
+            { emoji: "🍎", plural: "APPLES" },
+            { emoji: "🍌", plural: "BANANAS" },
+            { emoji: "🍓", plural: "STRAWBERRIES" },
+            { emoji: "🍊", plural: "ORANGES" },
+            { emoji: "🍉", plural: "WATERMELONS" },
+            { emoji: "🥕", plural: "CARROTS" },
+            { emoji: "⭐", plural: "STARS" },
+            { emoji: "🦋", plural: "BUTTERFLIES" },
+            { emoji: "🐝", plural: "BEES" },
+            { emoji: "🐞", plural: "LADYBIRDS" },
+            { emoji: "🐸", plural: "FROGS" },
+            { emoji: "🐢", plural: "TURTLES" },
+            { emoji: "🐟", plural: "FISH" },
+            { emoji: "🦆", plural: "DUCKS" },
+            { emoji: "🐶", plural: "DOGS" },
+            { emoji: "🐱", plural: "CATS" },
+            { emoji: "🌸", plural: "FLOWERS" },
+            { emoji: "🌳", plural: "TREES" },
+            { emoji: "🎈", plural: "BALLOONS" },
+            { emoji: "⚽", plural: "BALLS" },
+            { emoji: "🚗", plural: "CARS" },
+            { emoji: "🚀", plural: "ROCKETS" },
+            { emoji: "🖍️", plural: "CRAYONS" },
+            { emoji: "🍪", plural: "COOKIES" }
+        ];
+
+        // ==========================================
+        // 2. ESTAT DE L'APLICACIÓ
+        // ==========================================
+        let state = {
+            view: 'home',
+            maxNumber: 20,
+            starsEarned: 0,
+            // Racó 1: Explorem
+            selectedExploreNum: 1,
+            exploreCustomObj: null,
+            // Racó 2: Quants n'hi ha?
+            countTarget: 5,
+            countObject: DAILY_OBJECTS[0],
+            tappedIndices: [],
+            countOptions: [],
+            countSolved: false,
+            recentCountTargets: [],
+            // Racó 3: Caixes de 10 (Ten Frames)
+            tenFrameTarget: 12,
+            tenFrameFilled: [],
+            tenFrameObject: DAILY_OBJECTS[6],
+            tenFrameSolved: false,
+            recentTenFrameTargets: [],
+            // Racó 4: El Tren dels Números
+            seriesNumbers: [1, 2, 3, 4],
+            seriesMissingIndex: 2,
+            seriesOptions: [],
+            seriesSolved: false,
+            recentSeriesKeys: [],
+            // Racó 5: On n'hi ha més?
+            compareLeft: 4,
+            compareRight: 7,
+            compareObject: DAILY_OBJECTS[2],
+            compareSolved: false,
+            recentCompareKeys: [],
+            // Racó 6: Bingo Draw (1 to 20)
+            bingoDrawn: [],
+            bingoCurrent: null,
+            bingoObject: DAILY_OBJECTS[6],
+            bingoRolling: false
+        };
+
+        // ==========================================
+        // 3. ÀUDIO EN ANGLÈS (EN-GB) I EFECTES DE SO
+        // ==========================================
+        function speakEnglish(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text.toLowerCase());
+            utterance.lang = 'en-GB';
+            utterance.rate = 0.85;
+            utterance.pitch = 1.1;
+
+            const voices = window.speechSynthesis.getVoices();
+            const gbVoice = voices.find(v => v.lang.includes('en-GB') || v.lang.includes('en_GB'));
+            if (gbVoice) utterance.voice = gbVoice;
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+        }
+
+        function playTone(type) {
+            try {
+                if (typeof Tone === 'undefined') return;
+                if (Tone.context.state !== 'running') Tone.start();
+                const synth = new Tone.Synth({
+                    oscillator: { type: 'sine' },
+                    envelope: { attack: 0.01, decay: 0.12, sustain: 0.05, release: 0.2 }
+                }).toDestination();
+
+                if (type === 'tap') {
+                    synth.triggerAttackRelease("G4", "32n", Tone.now());
+                } else if (type === 'success') {
+                    synth.triggerAttackRelease("C5", "16n", Tone.now());
+                    synth.triggerAttackRelease("E5", "16n", Tone.now() + 0.09);
+                    synth.triggerAttackRelease("G5", "8n", Tone.now() + 0.18);
+                } else if (type === 'tryagain') {
+                    synth.triggerAttackRelease("D4", "16n", Tone.now());
+                } else if (type === 'bingo') {
+                    ["C5", "E5", "G5", "C6"].forEach((n, i) => synth.triggerAttackRelease(n, "8n", Tone.now() + i * 0.1));
+                }
+            } catch (e) {}
+        }
+
+        function celebrateConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 70,
+                    spread: 65,
+                    origin: { y: 0.65 },
+                    colors: ['#f43f5e', '#f59e0b', '#10b981', '#0ea5e9', '#8b5cf6']
+                });
+            }
+        }
+
+        // ==========================================
+        // 4. UTILITATS DE GENERACIÓ INFINITA
+        // ==========================================
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function pickUniqueInt(min, max, recentList, maxHistory) {
+            const totalRange = max - min + 1;
+            const limit = Math.min(maxHistory, totalRange - 1);
+            let candidate = getRandomInt(min, max);
+            let safety = 0;
+            while (recentList.includes(candidate) && safety < 30) {
+                candidate = getRandomInt(min, max);
+                safety++;
+            }
+            recentList.push(candidate);
+            if (recentList.length > limit) {
+                recentList.shift();
+            }
+            return candidate;
+        }
+
+        function pickRandomObject(excludeEmoji = null) {
+            const pool = excludeEmoji ? DAILY_OBJECTS.filter(o => o.emoji !== excludeEmoji) : DAILY_OBJECTS;
+            return pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        function getNumberWord(n) {
+            const found = NUMBERS_DATA.find(item => item.num === n);
+            return found ? found.word : "";
+        }
+
+        function setMaxNumber(max) {
+            playTone('tap');
+            state.maxNumber = max;
+            if (state.selectedExploreNum > max) state.selectedExploreNum = 1;
+            if (state.view === 'count') initCountChallenge();
+            else if (state.view === 'tenframe') initTenFrameChallenge();
+            else if (state.view === 'series') initSeriesChallenge();
+            else if (state.view === 'compare') initCompareChallenge();
+            else if (state.view === 'bingo') resetBingoGame();
+            render();
+        }
+
+        function goHome() {
+            playTone('tap');
+            state.view = 'home';
+            render();
+        }
+
+        function openActivity(activity) {
+            playTone('tap');
+            state.view = activity;
+            if (activity === 'explore') {
+                state.selectedExploreNum = 1;
+                state.exploreCustomObj = null;
+                speakEnglish("ONE");
+            } else if (activity === 'count') {
+                initCountChallenge();
+            } else if (activity === 'tenframe') {
+                initTenFrameChallenge();
+            } else if (activity === 'series') {
+                initSeriesChallenge();
+            } else if (activity === 'compare') {
+                initCompareChallenge();
+            } else if (activity === 'bingo') {
+                if (state.bingoDrawn.length === 0) resetBingoGame();
+            }
+            render();
+        }
+
+        function toggleDecretModal(show) {
+            playTone('tap');
+            const modal = document.getElementById('decret-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // ==========================================
+        // 5. RENDERITZAT DE VISTES
+        // ==========================================
+        function updateRangeButtons() {
+            const btn10 = document.getElementById('btn-range-10');
+            const btn20 = document.getElementById('btn-range-20');
+            if (state.maxNumber === 10) {
+                btn10.className = "px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm bg-amber-400 text-slate-900 shadow-sm";
+                btn20.className = "px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm text-slate-500 hover:bg-slate-200";
+            } else {
+                btn20.className = "px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm bg-rose-500 text-white shadow-sm";
+                btn10.className = "px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm text-slate-500 hover:bg-slate-200";
+            }
+        }
+
+        function render() {
+            updateRangeButtons();
+            const container = document.getElementById('app-container');
+
+            if (state.view === 'home') container.innerHTML = renderHomeView();
+            else if (state.view === 'explore') container.innerHTML = renderExploreView();
+            else if (state.view === 'count') container.innerHTML = renderCountView();
+            else if (state.view === 'tenframe') container.innerHTML = renderTenFrameView();
+            else if (state.view === 'series') container.innerHTML = renderSeriesView();
+            else if (state.view === 'compare') container.innerHTML = renderCompareView();
+            else if (state.view === 'bingo') container.innerHTML = renderBingoView();
+        }
+
+        // --- MENÚ DE RACONS DE JOC ---
+        function renderHomeView() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border-4 border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-center sm:text-left space-y-1">
+                            <span class="inline-block bg-rose-100 text-rose-700 font-bold text-xs px-3 py-1 rounded-full">
+                                🇬🇧 ENGLISH • INFINITE EXAMPLES • 1 TO ${state.maxNumber}
+                            </span>
+                            <h2 class="text-2xl sm:text-4xl font-bold text-slate-800">
+                                LET'S PLAY WITH NUMBERS! 🎈
+                            </h2>
+                            <p class="text-sm sm:text-base font-bold text-slate-500">
+                                TRIA UN RACÓ DE JOC PER COMPTAR I APRENDRE ELS NÚMEROS EN ANGLÈS:
+                            </p>
+                        </div>
+
+                        <div class="bg-amber-100 border-3 border-amber-300 px-5 py-3 rounded-3xl text-center shrink-0">
+                            <span class="text-3xl">⭐</span>
+                            <p class="text-xl font-bold text-amber-900">${state.starsEarned} STARS</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- RACÓ 1 -->
+                        <button onclick="openActivity('explore')" class="btn-infantil bg-white rounded-3xl p-6 border-4 border-sky-300 text-left flex flex-col justify-between gap-4">
+                            <div class="flex items-center justify-between">
+                                <span class="w-16 h-16 rounded-2xl bg-sky-100 text-4xl flex items-center justify-center">🔢</span>
+                                <span class="bg-sky-100 text-sky-800 font-bold text-xs px-3 py-1 rounded-full">RACÓ 1</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-800">EXPLORE NUMBERS</h3>
+                                <p class="text-sm font-bold text-slate-500 mt-1">ESCOLTA ELS NÚMEROS EN ANGLÈS I MIRA LES CAIXES DE 10.</p>
+                            </div>
+                            <span class="w-full py-2.5 rounded-2xl bg-sky-500 text-white font-bold text-center">PLAY ▶️</span>
+                        </button>
+
+                        <!-- RACÓ 2 -->
+                        <button onclick="openActivity('count')" class="btn-infantil bg-white rounded-3xl p-6 border-4 border-emerald-300 text-left flex flex-col justify-between gap-4">
+                            <div class="flex items-center justify-between">
+                                <span class="w-16 h-16 rounded-2xl bg-emerald-100 text-4xl flex items-center justify-center">🍎</span>
+                                <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full">RACÓ 2</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-800">HOW MANY?</h3>
+                                <p class="text-sm font-bold text-slate-500 mt-1">TOCA I COMPTA ELS OBJECTES EN ANGLÈS U A U.</p>
+                            </div>
+                            <span class="w-full py-2.5 rounded-2xl bg-emerald-500 text-white font-bold text-center">PLAY ▶️</span>
+                        </button>
+
+                        <!-- RACÓ 3 -->
+                        <button onclick="openActivity('tenframe')" class="btn-infantil bg-white rounded-3xl p-6 border-4 border-amber-300 text-left flex flex-col justify-between gap-4">
+                            <div class="flex items-center justify-between">
+                                <span class="w-16 h-16 rounded-2xl bg-amber-100 text-4xl flex items-center justify-center">🟦</span>
+                                <span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1 rounded-full">RACÓ 3</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-800">FILL THE BOXES</h3>
+                                <p class="text-sm font-bold text-slate-500 mt-1">CONSTRUEIX EL NÚMERO DINS LES CAIXES DE 10.</p>
+                            </div>
+                            <span class="w-full py-2.5 rounded-2xl bg-amber-500 text-white font-bold text-center">PLAY ▶️</span>
+                        </button>
+
+                        <!-- RACÓ 4 -->
+                        <button onclick="openActivity('series')" class="btn-infantil bg-white rounded-3xl p-6 border-4 border-rose-300 text-left flex flex-col justify-between gap-4">
+                            <div class="flex items-center justify-between">
+                                <span class="w-16 h-16 rounded-2xl bg-rose-100 text-4xl flex items-center justify-center">🚂</span>
+                                <span class="bg-rose-100 text-rose-800 font-bold text-xs px-3 py-1 rounded-full">RACÓ 4</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-800">WHAT'S MISSING?</h3>
+                                <p class="text-sm font-bold text-slate-500 mt-1">DESCOBREIX QUIN NÚMERO FALTA AL TREN.</p>
+                            </div>
+                            <span class="w-full py-2.5 rounded-2xl bg-rose-500 text-white font-bold text-center">PLAY ▶️</span>
+                        </button>
+
+                        <!-- RACÓ 5 -->
+                        <button onclick="openActivity('compare')" class="btn-infantil bg-white rounded-3xl p-6 border-4 border-purple-300 text-left flex flex-col justify-between gap-4">
+                            <div class="flex items-center justify-between">
+                                <span class="w-16 h-16 rounded-2xl bg-purple-100 text-4xl flex items-center justify-center">⚖️</span>
+                                <span class="bg-purple-100 text-purple-800 font-bold text-xs px-3 py-1 rounded-full">RACÓ 5</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-800">WHERE ARE THERE MORE?</h3>
+                                <p class="text-sm font-bold text-slate-500 mt-1">COMPARA DOS GRUPS I TRIA ON N'HI HA MÉS.</p>
+                            </div>
+                            <span class="w-full py-2.5 rounded-2xl bg-purple-600 text-white font-bold text-center">PLAY ▶️</span>
+                        </button>
+
+                        <!-- RACÓ 6: BINGO DRAW -->
+                        <button onclick="openActivity('bingo')" class="btn-infantil bg-gradient-to-br from-amber-50 to-orange-100 rounded-3xl p-6 border-4 border-orange-400 text-left flex flex-col justify-between gap-4">
+                            <div class="flex items-center justify-between">
+                                <span class="w-16 h-16 rounded-2xl bg-orange-200 text-4xl flex items-center justify-center">🎱</span>
+                                <span class="bg-orange-500 text-white font-bold text-xs px-3 py-1 rounded-full">JOC DE GRUP</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-orange-950">BINGO DRAW (1-${state.maxNumber})</h3>
+                                <p class="text-sm font-bold text-orange-800 mt-1">BOMBO DE SORTEIG PER JUGAR AMB ELS CARTRONS IMPRESOS!</p>
+                            </div>
+                            <span class="w-full py-2.5 rounded-2xl bg-orange-500 text-white font-bold text-center">OPEN BINGO 🎱</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // RACÓ 1: EXPLOREM ELS NÚMEROS (1 AL 20)
+        // ==========================================
+        function renderExploreView() {
+            const visibleNumbers = NUMBERS_DATA.slice(0, state.maxNumber);
+            const current = NUMBERS_DATA.find(n => n.num === state.selectedExploreNum) || visibleNumbers[0];
+            const obj = state.exploreCustomObj || DAILY_OBJECTS[(current.num - 1) % DAILY_OBJECTS.length];
+
+            return `
+                <div class="space-y-5">
+                    <div class="flex items-center justify-between">
+                        <button onclick="goHome()" class="btn-infantil bg-white px-4 py-2.5 rounded-2xl font-bold border-2 border-slate-200">
+                            ⬅️ BACK (TORNAR)
+                        </button>
+                        <button onclick="changeExploreObject()" class="btn-infantil bg-amber-100 hover:bg-amber-200 text-amber-900 px-4 py-2 rounded-2xl font-bold text-sm border-2 border-amber-300">
+                            🔄 CHANGE OBJECT (${obj.emoji})
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 shadow-xl border-4 border-sky-300 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div class="text-center space-y-3">
+                            <button onclick="speakEnglish('${current.num} ${obj.plural}')" class="btn-infantil w-36 h-36 sm:w-44 sm:h-44 mx-auto rounded-3xl ${current.color} border-b-8 flex flex-col items-center justify-center shadow-lg">
+                                <span class="text-6xl sm:text-7xl font-bold leading-none">${current.num}</span>
+                                <span class="text-lg sm:text-xl font-bold mt-2 tracking-wider">${current.word}</span>
+                            </button>
+                            <p class="text-base sm:text-lg font-bold text-sky-700">
+                                🔊 "${current.word} ${obj.plural}"
+                            </p>
+                            ${current.num > 10 ? `
+                                <div class="inline-block bg-amber-100 border-2 border-amber-300 px-4 py-1.5 rounded-2xl text-sm font-bold text-amber-900">
+                                    TEN (10) + ${getNumberWord(current.num - 10)} (${current.num - 10}) = ${current.num}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="space-y-3">
+                            <p class="text-xs font-bold text-center text-slate-400">TEN FRAMES (CAIXES DE 10):</p>
+                            ${renderTenFramesVisual(current.num, obj.emoji, state.maxNumber > 10)}
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-md border-4 border-slate-200">
+                        <div class="grid grid-cols-5 sm:grid-cols-10 gap-2 sm:gap-2.5">
+                            ${visibleNumbers.map(item => {
+                                const isSelected = item.num === current.num;
+                                return `
+                                    <button onclick="selectExploreNumber(${item.num})"
+                                        class="btn-infantil py-3 rounded-2xl font-bold text-xl sm:text-2xl border-2 flex flex-col items-center justify-center
+                                        ${isSelected ? item.color + ' scale-105 ring-4 ring-amber-300' : 'bg-slate-50 hover:bg-sky-50 border-slate-200 text-slate-800'}">
+                                        <span>${item.num}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectExploreNumber(num) {
+            state.selectedExploreNum = num;
+            const obj = state.exploreCustomObj || DAILY_OBJECTS[(num - 1) % DAILY_OBJECTS.length];
+            speakEnglish(`${getNumberWord(num)} ${obj.plural}`);
+            render();
+        }
+
+        function changeExploreObject() {
+            playTone('tap');
+            const currentEmoji = state.exploreCustomObj ? state.exploreCustomObj.emoji : null;
+            state.exploreCustomObj = pickRandomObject(currentEmoji);
+            speakEnglish(`${getNumberWord(state.selectedExploreNum)} ${state.exploreCustomObj.plural}`);
+            render();
+        }
+
+        function renderTenFramesVisual(count, emoji, showTwoFrames) {
+            const frames = showTwoFrames ? [0, 1] : [0];
+            return `
+                <div class="space-y-2.5 max-w-md mx-auto">
+                    ${frames.map(frameIdx => `
+                        <div class="grid grid-cols-5 gap-1.5 bg-sky-50 p-2.5 rounded-2xl border-3 border-sky-300">
+                            ${Array.from({ length: 10 }).map((_, cellIdx) => {
+                                const globalIdx = frameIdx * 10 + cellIdx;
+                                const isFilled = globalIdx < count;
+                                return `
+                                    <div class="aspect-square rounded-xl border-2 flex items-center justify-center text-2xl sm:text-3xl
+                                        ${isFilled ? 'bg-white border-sky-400 shadow-sm animate-pop-in' : 'bg-sky-100/50 border-dashed border-sky-200'}">
+                                        ${isFilled ? emoji : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // RACÓ 2: HOW MANY? (QUANTS N'HI HA?)
+        // ==========================================
+        function initCountChallenge() {
+            const target = pickUniqueInt(1, state.maxNumber, state.recentCountTargets, 8);
+            const obj = pickRandomObject(state.countObject ? state.countObject.emoji : null);
+            state.countTarget = target;
+            state.countObject = obj;
+            state.tappedIndices = [];
+            state.countSolved = false;
+
+            const opts = new Set([target]);
+            while (opts.size < 4) {
+                const offset = getRandomInt(-3, 3);
+                const candidate = Math.min(state.maxNumber, Math.max(1, target + offset));
+                opts.add(candidate);
+            }
+            state.countOptions = Array.from(opts).sort((a, b) => a - b);
+            speakEnglish(`HOW MANY ${obj.plural}?`);
+        }
+
+        function renderCountView() {
+            const obj = state.countObject;
+            const tappedCount = state.tappedIndices.length;
+
+            return `
+                <div class="max-w-3xl mx-auto space-y-5">
+                    <div class="flex items-center justify-between">
+                        <button onclick="goHome()" class="btn-infantil bg-white px-4 py-2.5 rounded-2xl font-bold border-2 border-slate-200">
+                            ⬅️ BACK
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="speakEnglish('HOW MANY ${obj.plural}?')" class="btn-infantil bg-sky-100 text-sky-900 px-3.5 py-2 rounded-2xl font-bold text-sm border-2 border-sky-200">
+                                🔊 LISTEN
+                            </button>
+                            <button onclick="initCountChallenge(); render();" class="btn-infantil bg-amber-100 text-amber-900 px-3.5 py-2 rounded-2xl font-bold text-sm border-2 border-amber-300">
+                                🔄 NEW
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border-4 border-emerald-300 text-center space-y-5">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">
+                                HOW MANY ${obj.plural}? ${obj.emoji}
+                            </h2>
+                            <p class="text-sm font-bold text-slate-500 mt-1">
+                                TOCA CADA DIBUIX PER COMPTAR-LOS EN ANGLÈS!
+                            </p>
+                        </div>
+
+                        <div class="bg-emerald-50 rounded-3xl p-5 border-3 border-emerald-200 min-h-[180px] flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+                            ${Array.from({ length: state.countTarget }).map((_, idx) => {
+                                const isTapped = state.tappedIndices.includes(idx);
+                                const tapOrder = state.tappedIndices.indexOf(idx) + 1;
+                                return `
+                                    <button onclick="tapCountItem(${idx})"
+                                        class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-3 flex items-center justify-center text-4xl sm:text-5xl transition-all
+                                        ${isTapped ? 'bg-amber-200 border-amber-500 scale-105 shadow-md' : 'bg-white border-emerald-200 hover:scale-105 shadow-sm'}">
+                                        <span>${obj.emoji}</span>
+                                        ${isTapped ? `
+                                            <span class="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-rose-500 text-white font-bold text-sm flex items-center justify-center shadow">
+                                                ${tapOrder}
+                                            </span>
+                                        ` : ''}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <div class="text-base font-bold text-emerald-700">
+                            ${tappedCount > 0 ? `COUNTED: ${tappedCount} (${getNumberWord(tappedCount)})` : 'TAP TO COUNT! 👆'}
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+                            ${state.countOptions.map(opt => {
+                                const isRight = state.countSolved && opt === state.countTarget;
+                                return `
+                                    <button onclick="checkCountAnswer(${opt})" ${state.countSolved ? 'disabled' : ''}
+                                        class="btn-infantil py-4 px-3 rounded-2xl font-bold border-3 flex flex-col items-center justify-center
+                                        ${isRight ? 'bg-emerald-500 border-emerald-700 text-white scale-105' : 'bg-slate-50 hover:bg-amber-50 border-slate-200 text-slate-800'}">
+                                        <span class="text-3xl sm:text-4xl">${opt}</span>
+                                        <span class="text-xs sm:text-sm mt-1">${getNumberWord(opt)}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        ${state.countSolved ? `
+                            <div class="bg-emerald-100 border-2 border-emerald-400 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-pop-in">
+                                <span class="text-lg font-bold text-emerald-900">
+                                    🎉 GREAT! ${getNumberWord(state.countTarget)} ${obj.plural}!
+                                </span>
+                                <button onclick="initCountChallenge(); render();" class="btn-infantil bg-emerald-600 text-white px-6 py-2.5 rounded-2xl font-bold">
+                                    NEXT ➡️
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function tapCountItem(idx) {
+            if (!state.tappedIndices.includes(idx)) {
+                state.tappedIndices.push(idx);
+                playTone('tap');
+                speakEnglish(getNumberWord(state.tappedIndices.length));
+                render();
+            } else {
+                const order = state.tappedIndices.indexOf(idx) + 1;
+                speakEnglish(getNumberWord(order));
+            }
+        }
+
+        function checkCountAnswer(selected) {
+            if (selected === state.countTarget) {
+                playTone('success');
+                state.countSolved = true;
+                state.starsEarned++;
+                speakEnglish(`YES! ${getNumberWord(state.countTarget)} ${state.countObject.plural}!`);
+                celebrateConfetti();
+            } else {
+                playTone('tryagain');
+                speakEnglish(`${getNumberWord(selected)}. COUNT AGAIN!`);
+            }
+            render();
+        }
+
+        // ==========================================
+        // RACÓ 3: FILL THE BOXES (TEN FRAMES)
+        // ==========================================
+        function initTenFrameChallenge() {
+            const minVal = state.maxNumber > 10 ? 6 : 2;
+            const target = pickUniqueInt(minVal, state.maxNumber, state.recentTenFrameTargets, 8);
+            state.tenFrameTarget = target;
+            state.tenFrameFilled = [];
+            state.tenFrameObject = pickRandomObject(state.tenFrameObject ? state.tenFrameObject.emoji : null);
+            state.tenFrameSolved = false;
+            speakEnglish(`PUT ${getNumberWord(target)} ${state.tenFrameObject.plural}`);
+        }
+
+        function renderTenFrameView() {
+            const currentCount = state.tenFrameFilled.length;
+            const target = state.tenFrameTarget;
+            const obj = state.tenFrameObject;
+            const frames = state.maxNumber > 10 ? [0, 1] : [0];
+
+            return `
+                <div class="max-w-3xl mx-auto space-y-5">
+                    <div class="flex items-center justify-between">
+                        <button onclick="goHome()" class="btn-infantil bg-white px-4 py-2.5 rounded-2xl font-bold border-2 border-slate-200">
+                            ⬅️ BACK
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="speakEnglish('PUT ${getNumberWord(target)} ${obj.plural}')" class="btn-infantil bg-sky-100 text-sky-900 px-3.5 py-2 rounded-2xl font-bold text-sm border-2 border-sky-200">
+                                🔊 LISTEN
+                            </button>
+                            <button onclick="initTenFrameChallenge(); render();" class="btn-infantil bg-amber-100 text-amber-900 px-3.5 py-2 rounded-2xl font-bold text-sm border-2 border-amber-300">
+                                🔄 NEW
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border-4 border-amber-300 text-center space-y-5">
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                            <div class="bg-amber-400 text-slate-950 px-5 py-2 rounded-2xl font-bold text-3xl sm:text-4xl shadow">
+                                ${target} • ${getNumberWord(target)}
+                            </div>
+                            <h2 class="text-xl sm:text-2xl font-bold text-slate-800">
+                                PUT ${getNumberWord(target)} ${obj.plural} ${obj.emoji}
+                            </h2>
+                        </div>
+
+                        <div class="space-y-3 max-w-lg mx-auto">
+                            ${frames.map(frameIdx => `
+                                <div class="grid grid-cols-5 gap-2 bg-amber-50 p-3 rounded-2xl border-3 border-amber-300">
+                                    ${Array.from({ length: 10 }).map((_, cellIdx) => {
+                                        const globalIdx = frameIdx * 10 + cellIdx;
+                                        const isFilled = state.tenFrameFilled.includes(globalIdx);
+                                        return `
+                                            <button onclick="toggleTenFrameCell(${globalIdx})" ${state.tenFrameSolved ? 'disabled' : ''}
+                                                class="aspect-square rounded-xl border-2 flex items-center justify-center text-3xl sm:text-4xl transition-all
+                                                ${isFilled ? 'bg-white border-amber-500 shadow-sm scale-105' : 'bg-white/60 hover:bg-white border-dashed border-amber-300'}">
+                                                ${isFilled ? obj.emoji : ''}
+                                            </button>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-center gap-3">
+                            <span class="bg-slate-100 px-4 py-2 rounded-2xl font-bold text-lg text-slate-700">
+                                YOU HAVE: ${currentCount} (${getNumberWord(currentCount) || 'ZERO'})
+                            </span>
+
+                            ${target > 10 && currentCount < 10 && !state.tenFrameSolved ? `
+                                <button onclick="fillFirstTen()" class="btn-infantil bg-sky-100 hover:bg-sky-200 text-sky-900 border-2 border-sky-300 px-4 py-2 rounded-2xl font-bold text-sm">
+                                    ⚡ FILL 10 (TEN)
+                                </button>
+                            ` : ''}
+
+                            ${!state.tenFrameSolved ? `
+                                <button onclick="checkTenFrameAnswer()" class="btn-infantil bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-2xl font-bold text-lg">
+                                    CHECK ✔️
+                                </button>
+                            ` : ''}
+                        </div>
+
+                        ${state.tenFrameSolved ? `
+                            <div class="bg-emerald-100 border-2 border-emerald-400 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-pop-in">
+                                <span class="text-lg font-bold text-emerald-900">
+                                    🌟 AWESOME! ${target} = ${getNumberWord(target)}!
+                                </span>
+                                <button onclick="initTenFrameChallenge(); render();" class="btn-infantil bg-emerald-600 text-white px-6 py-2.5 rounded-2xl font-bold">
+                                    NEXT ➡️
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleTenFrameCell(idx) {
+            if (state.tenFrameFilled.includes(idx)) {
+                state.tenFrameFilled = state.tenFrameFilled.filter(i => i !== idx);
+                playTone('tap');
+            } else {
+                state.tenFrameFilled.push(idx);
+                playTone('tap');
+                speakEnglish(getNumberWord(state.tenFrameFilled.length));
+            }
+            render();
+        }
+
+        function fillFirstTen() {
+            for (let i = 0; i < 10; i++) {
+                if (!state.tenFrameFilled.includes(i)) state.tenFrameFilled.push(i);
+            }
+            playTone('tap');
+            speakEnglish("TEN");
+            render();
+        }
+
+        function checkTenFrameAnswer() {
+            const count = state.tenFrameFilled.length;
+            if (count === state.tenFrameTarget) {
+                playTone('success');
+                state.tenFrameSolved = true;
+                state.starsEarned++;
+                speakEnglish(`WELL DONE! ${getNumberWord(state.tenFrameTarget)}!`);
+                celebrateConfetti();
+            } else if (count < state.tenFrameTarget) {
+                playTone('tryagain');
+                speakEnglish(`YOU HAVE ${getNumberWord(count)}. ADD MORE!`);
+            } else {
+                playTone('tryagain');
+                speakEnglish(`TOO MANY! REMOVE SOME!`);
+            }
+            render();
+        }
+
+        // ==========================================
+        // RACÓ 4: WHAT'S MISSING? (EL TREN DELS NÚMEROS)
+        // ==========================================
+        function initSeriesChallenge() {
+            let start = 1;
+            let missingIdx = 0;
+            let key = "";
+            let safety = 0;
+            do {
+                start = getRandomInt(1, state.maxNumber - 3);
+                missingIdx = getRandomInt(0, 3);
+                key = `${start}-${missingIdx}`;
+                safety++;
+            } while (state.recentSeriesKeys.includes(key) && safety < 25);
+
+            state.recentSeriesKeys.push(key);
+            if (state.recentSeriesKeys.length > 10) state.recentSeriesKeys.shift();
+
+            state.seriesNumbers = [start, start + 1, start + 2, start + 3];
+            state.seriesMissingIndex = missingIdx;
+            state.seriesSolved = false;
+
+            const correct = state.seriesNumbers[missingIdx];
+            const opts = new Set([correct]);
+            while (opts.size < 3) {
+                const candidate = Math.min(state.maxNumber, Math.max(1, correct + getRandomInt(-3, 3)));
+                opts.add(candidate);
+            }
+            state.seriesOptions = Array.from(opts).sort((a, b) => a - b);
+            speakEnglish("WHAT NUMBER IS MISSING?");
+        }
+
+        function renderSeriesView() {
+            const correctNum = state.seriesNumbers[state.seriesMissingIndex];
+
+            return `
+                <div class="max-w-3xl mx-auto space-y-5">
+                    <div class="flex items-center justify-between">
+                        <button onclick="goHome()" class="btn-infantil bg-white px-4 py-2.5 rounded-2xl font-bold border-2 border-slate-200">
+                            ⬅️ BACK
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="speakEnglish('WHAT NUMBER IS MISSING?')" class="btn-infantil bg-sky-100 text-sky-900 px-3.5 py-2 rounded-2xl font-bold text-sm border-2 border-sky-200">
+                                🔊 LISTEN
+                            </button>
+                            <button onclick="initSeriesChallenge(); render();" class="btn-infantil bg-amber-100 text-amber-900 px-3.5 py-2 rounded-2xl font-bold text-sm border-2 border-amber-300">
+                                🔄 NEW
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border-4 border-rose-300 text-center space-y-6">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">
+                                WHAT NUMBER IS MISSING? 🚂
+                            </h2>
+                            <p class="text-sm font-bold text-slate-500 mt-1">
+                                TOCA ELS VAGONS PER ESCOLTAR LA SÈRIE EN ANGLÈS:
+                            </p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 py-2">
+                            <span class="text-4xl sm:text-5xl">🚂</span>
+                            ${state.seriesNumbers.map((num, idx) => {
+                                const isMissing = idx === state.seriesMissingIndex && !state.seriesSolved;
+                                return `
+                                    <button onclick="${isMissing ? '' : `speakEnglish('${getNumberWord(num)}')`}"
+                                        class="w-20 h-24 sm:w-24 sm:h-28 rounded-2xl border-4 flex flex-col items-center justify-center shadow-md transition-all
+                                        ${isMissing ? 'bg-amber-100 border-dashed border-amber-500 text-amber-600 animate-pulse' : 'bg-rose-500 border-rose-700 text-white'}">
+                                        <span class="text-3xl sm:text-4xl font-bold">${isMissing ? '?' : num}</span>
+                                        <span class="text-[11px] sm:text-xs font-bold mt-1">${isMissing ? 'MISSING' : getNumberWord(num)}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+                            ${state.seriesOptions.map(opt => {
+                                const isRight = state.seriesSolved && opt === correctNum;
+                                return `
+                                    <button onclick="checkSeriesAnswer(${opt})" ${state.seriesSolved ? 'disabled' : ''}
+                                        class="btn-infantil py-4 rounded-2xl font-bold border-3 flex flex-col items-center justify-center
+                                        ${isRight ? 'bg-emerald-500 border-emerald-700 text-white scale-105' : 'bg-slate-50 hover:bg-rose-50 border-slate-200 text-slate-800'}">
+                                        <span class="text-3xl">${opt}</span>
+                                        <span class="text-xs mt-1">${getNumberWord(opt)}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        ${state.seriesSolved ? `
+                            <div class="bg-emerald-100 border-2 border-emerald-400 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-pop-in">
+                                <span class="text-lg font-bold text-emerald-900">
+                                    🎉 YES! ${state.seriesNumbers.map(n => getNumberWord(n)).join(' - ')}!
+                                </span>
+                                <button onclick="initSeriesChallenge(); render();" class="btn-infantil bg-emerald-600 text-white px-6 py-2.5 rounded-2xl font-bold">
+                                    NEXT ➡️
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkSeriesAnswer(selected) {
+            const correct = state.seriesNumbers[state.seriesMissingIndex];
+            if (selected === correct) {
+                playTone('success');
+                state.seriesSolved = true;
+                state.starsEarned++;
+                speakEnglish(`${getNumberWord(correct)}! GREAT JOB!`);
+                celebrateConfetti();
+            } else {
+                playTone('tryagain');
+                speakEnglish(`${getNumberWord(selected)}. TRY AGAIN!`);
+            }
+            render();
+        }
+
+        // ==========================================
+        // RACÓ 5: WHERE ARE THERE MORE? (COMPARAM QUANTITATS)
+        // ==========================================
+        function initCompareChallenge() {
+            let left = 1;
+            let right = 2;
+            let key = "";
+            let safety = 0;
+            do {
+                left = getRandomInt(1, state.maxNumber);
+                right = getRandomInt(1, state.maxNumber);
+                while (right === left) {
+                    right = getRandomInt(1, state.maxNumber);
+                }
+                key = `${left}-${right}`;
+                safety++;
+            } while (state.recentCompareKeys.includes(key) && safety < 25);
+
+            state.recentCompareKeys.push(key);
+            if (state.recentCompareKeys.length > 10) state.recentCompareKeys.shift();
+
+            state.compareLeft = left;
+            state.compareRight = right;
+            state.compareObject = pickRandomObject(state.compareObject ? state.compareObject.emoji : null);
+            state.compareSolved = false;
+            speakEnglish(`WHERE ARE THERE MORE ${state.compareObject.plural}?`);
+        }
+
+        function renderCompareView() {
+            const obj = state.compareObject;
+            const maxVal = Math.max(state.compareLeft, state.compareRight);
+
+            return `
+                <div class="max-w-4xl mx-auto space-y-5">
+                    <div class="flex items-center justify-between">
+                        <button onclick="goHome()" class="btn-infantil bg-white px-4 py-2.5 rounded-2xl font-bold border-2 border-slate-200">
+                            ⬅️ BACK
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="speakEnglish('WHERE ARE THERE MORE ${obj.plural}?')" class="btn-infantil bg-sky-100 text-sky-900 px-3.5 py-2 rounded-2xl font-bold text-sm border-2 border-sky-200">
+                                🔊 LISTEN
+                            </button>
+                            <button onclick="initCompareChallenge(); render();" class="btn-infantil bg-amber-100 text-amber-900 px-3.5 py-2 rounded-2xl font-bold text-sm border-2 border-amber-300">
+                                🔄 NEW
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border-4 border-purple-300 text-center space-y-6">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">
+                            WHERE ARE THERE MORE ${obj.plural}? ⚖️
+                        </h2>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <!-- GRUP ESQUERRA -->
+                            <button onclick="checkCompareAnswer(${state.compareLeft})" ${state.compareSolved ? 'disabled' : ''}
+                                class="btn-infantil rounded-3xl p-5 border-4 flex flex-col items-center justify-between min-h-[220px]
+                                ${state.compareSolved && state.compareLeft === maxVal ? 'bg-emerald-100 border-emerald-500' : 'bg-purple-50 hover:bg-purple-100 border-purple-200'}">
+                                <div class="flex flex-wrap items-center justify-center gap-2 my-auto">
+                                    ${Array.from({ length: state.compareLeft }).map(() => `<span class="text-3xl sm:text-4xl">${obj.emoji}</span>`).join('')}
+                                </div>
+                                ${state.compareSolved ? `
+                                    <span class="mt-3 bg-white px-4 py-1 rounded-xl font-bold text-lg text-slate-800 border-2 border-slate-200">
+                                        ${state.compareLeft} • ${getNumberWord(state.compareLeft)}
+                                    </span>
+                                ` : `<span class="mt-3 text-sm font-bold text-purple-700">TAP HERE 👆</span>`}
+                            </button>
+
+                            <!-- GRUP DRETA -->
+                            <button onclick="checkCompareAnswer(${state.compareRight})" ${state.compareSolved ? 'disabled' : ''}
+                                class="btn-infantil rounded-3xl p-5 border-4 flex flex-col items-center justify-between min-h-[220px]
+                                ${state.compareSolved && state.compareRight === maxVal ? 'bg-emerald-100 border-emerald-500' : 'bg-amber-50 hover:bg-amber-100 border-amber-200'}">
+                                <div class="flex flex-wrap items-center justify-center gap-2 my-auto">
+                                    ${Array.from({ length: state.compareRight }).map(() => `<span class="text-3xl sm:text-4xl">${obj.emoji}</span>`).join('')}
+                                </div>
+                                ${state.compareSolved ? `
+                                    <span class="mt-3 bg-white px-4 py-1 rounded-xl font-bold text-lg text-slate-800 border-2 border-slate-200">
+                                        ${state.compareRight} • ${getNumberWord(state.compareRight)}
+                                    </span>
+                                ` : `<span class="mt-3 text-sm font-bold text-amber-800">TAP HERE 👆</span>`}
+                            </button>
+                        </div>
+
+                        ${state.compareSolved ? `
+                            <div class="bg-emerald-100 border-2 border-emerald-400 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-pop-in">
+                                <span class="text-lg font-bold text-emerald-900">
+                                    🎉 YES! ${getNumberWord(maxVal)} IS MORE THAN ${getNumberWord(Math.min(state.compareLeft, state.compareRight))}!
+                                </span>
+                                <button onclick="initCompareChallenge(); render();" class="btn-infantil bg-emerald-600 text-white px-6 py-2.5 rounded-2xl font-bold">
+                                    NEXT ➡️
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkCompareAnswer(chosenValue) {
+            const maxVal = Math.max(state.compareLeft, state.compareRight);
+            if (chosenValue === maxVal) {
+                playTone('success');
+                state.compareSolved = true;
+                state.starsEarned++;
+                speakEnglish(`YES! ${getNumberWord(maxVal)} ${state.compareObject.plural}!`);
+                celebrateConfetti();
+            } else {
+                playTone('tryagain');
+                speakEnglish("COUNT AGAIN! WHERE ARE THERE MORE?");
+            }
+            render();
+        }
+
+        // ==========================================
+        // RACÓ 6: BINGO DRAW (SORTEIG 1 TO 20 PER A CARTRONS IMPRESOS)
+        // ==========================================
+        function resetBingoGame() {
+            state.bingoDrawn = [];
+            state.bingoCurrent = null;
+            state.bingoObject = pickRandomObject();
+            state.bingoRolling = false;
+        }
+
+        function drawNextBingoNumber() {
+            if (state.bingoRolling) return;
+            const available = [];
+            for (let n = 1; n <= state.maxNumber; n++) {
+                if (!state.bingoDrawn.includes(n)) available.push(n);
+            }
+            if (available.length === 0) {
+                speakEnglish("ALL NUMBERS DRAWN! START A NEW BINGO!");
+                return;
+            }
+
+            state.bingoRolling = true;
+            playTone('tap');
+            render();
+
+            setTimeout(() => {
+                const picked = available[Math.floor(Math.random() * available.length)];
+                state.bingoCurrent = picked;
+                state.bingoDrawn.push(picked);
+                state.bingoObject = pickRandomObject(state.bingoObject ? state.bingoObject.emoji : null);
+                state.bingoRolling = false;
+                playTone('success');
+                speakEnglish(`NUMBER ${getNumberWord(picked)}! ${getNumberWord(picked)}!`);
+                render();
+            }, 420);
+        }
+
+        function celebrateBingoWinner() {
+            playTone('bingo');
+            celebrateConfetti();
+            speakEnglish("BINGO! WELL DONE EVERYONE!");
+        }
+
+        function renderBingoView() {
+            const totalPool = state.maxNumber;
+            const drawnCount = state.bingoDrawn.length;
+            const remainingCount = totalPool - drawnCount;
+            const currentNum = state.bingoCurrent;
+            const currentObj = currentNum ? NUMBERS_DATA.find(n => n.num === currentNum) : null;
+            const lastFew = [...state.bingoDrawn].reverse().slice(1, 6);
+
+            return `
+                <div class="max-w-5xl mx-auto space-y-5">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <button onclick="goHome()" class="btn-infantil bg-white px-4 py-2.5 rounded-2xl font-bold border-2 border-slate-200">
+                            ⬅️ BACK
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="celebrateBingoWinner()" class="btn-infantil bg-amber-400 hover:bg-amber-500 text-amber-950 px-4 py-2 rounded-2xl font-bold text-sm border-2 border-amber-500">
+                                🏆 BINGO! (CELEBRAR)
+                            </button>
+                            <button onclick="resetBingoGame(); playTone('tap'); render();" class="btn-infantil bg-rose-100 hover:bg-rose-200 text-rose-800 px-4 py-2 rounded-2xl font-bold text-sm border-2 border-rose-300">
+                                🔄 NEW GAME (REINICIAR)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                        <!-- BOMBO I BOLA ACTUAL -->
+                        <div class="lg:col-span-5 bg-white rounded-3xl p-6 shadow-xl border-4 border-orange-400 flex flex-col items-center justify-between text-center space-y-5">
+                            <div>
+                                <span class="bg-orange-100 text-orange-800 font-bold text-xs px-3 py-1 rounded-full">
+                                    🎱 BINGO DRAW • 1 TO ${totalPool}
+                                </span>
+                                <h2 class="text-2xl font-bold text-slate-800 mt-1">
+                                    LISTEN & MARK YOUR CARD!
+                                </h2>
+                            </div>
+
+                            <!-- BOLA GEGANT (NOMÉS PARAULA EN MAJÚSCULA I ÀUDIO) -->
+                            <div class="py-4">
+                                ${currentObj ? `
+                                    <button onclick="speakEnglish('NUMBER ${currentObj.word}! ${currentObj.word}!')"
+                                        class="btn-infantil w-48 h-48 sm:w-56 sm:h-56 rounded-full ${currentObj.color} border-8 flex flex-col items-center justify-center shadow-2xl mx-auto px-3 ${state.bingoRolling ? 'animate-drum' : 'animate-pop-in'}">
+                                        <span class="text-2xl sm:text-3xl font-bold tracking-wider leading-tight">${currentObj.word}</span>
+                                        <span class="text-xs font-bold opacity-90 mt-2">🔊 LISTEN</span>
+                                    </button>
+                                ` : `
+                                    <div class="w-48 h-48 sm:w-56 sm:h-56 rounded-full bg-orange-100 border-8 border-dashed border-orange-300 flex flex-col items-center justify-center mx-auto ${state.bingoRolling ? 'animate-drum' : ''}">
+                                        <span class="text-6xl">🎱</span>
+                                        <span class="text-sm font-bold text-orange-800 mt-2">READY!</span>
+                                    </div>
+                                `}
+                            </div>
+
+                            <!-- BOTÓ PER TREURE BOLA -->
+                            <button onclick="drawNextBingoNumber()" ${remainingCount === 0 || state.bingoRolling ? 'disabled' : ''}
+                                class="btn-infantil w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 disabled:opacity-40 text-white font-bold text-xl sm:text-2xl shadow-lg">
+                                ${remainingCount === 0 ? 'ALL NUMBERS OUT! 🎉' : '🎱 NEXT NUMBER! (TREURE BOLA)'}
+                            </button>
+                        </div>
+
+                        <!-- TAULER DE COMPROVACIÓ -->
+                        <div class="lg:col-span-7 bg-white rounded-3xl p-6 shadow-xl border-4 border-slate-200 flex flex-col justify-between space-y-5">
+                            <div class="flex items-center justify-between border-b-2 border-slate-100 pb-3">
+                                <h3 class="text-xl font-bold text-slate-800">
+                                    📋 BINGO BOARD (COMPROVACIÓ)
+                                </h3>
+                                <span class="bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded-xl text-sm">
+                                    ${drawnCount} / ${totalPool}
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-4 sm:grid-cols-5 gap-2.5 sm:gap-3">
+                                ${NUMBERS_DATA.slice(0, totalPool).map(item => {
+                                    const isDrawn = state.bingoDrawn.includes(item.num);
+                                    const isLatest = item.num === currentNum;
+                                    return `
+                                        <button onclick="speakEnglish('${item.word}')"
+                                            class="py-4 sm:py-5 px-1 rounded-2xl font-bold border-3 flex items-center justify-center text-center transition-all
+                                            ${isLatest ? item.color + ' scale-105 ring-4 ring-amber-400 shadow-lg' :
+                                              isDrawn ? 'bg-emerald-500 border-emerald-700 text-white shadow-sm' :
+                                              'bg-slate-50 border-slate-200 text-slate-300'}">
+                                            <span class="text-xs sm:text-sm tracking-wide leading-tight">${item.word}</span>
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
+
+                            <!-- ÚLTIMS NÚMEROS (NOMÉS EN LLETRA) -->
+                            <div class="bg-slate-50 rounded-2xl p-3 border-2 border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                                <span class="text-xs font-bold text-slate-500">LAST NUMBERS (ÚLTIMS):</span>
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    ${lastFew.length > 0 ? lastFew.map(n => `
+                                        <span class="px-2.5 py-1 rounded-full bg-emerald-100 border-2 border-emerald-400 text-emerald-900 font-bold text-xs">
+                                            ${getNumberWord(n)}
+                                        </span>
+                                    `).join('') : '<span class="text-xs font-bold text-slate-400">---</span>'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.onload = function() {
+            render();
+        };
+    </script>
+</body>
+</html>
